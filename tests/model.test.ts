@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {initialState,recommend,reschedule,streak,validState} from '../src/model.ts';
+import {places} from '../src/data.ts';
+test('route respects goals, available destinations and time budget',()=>{const profile={...initialState().profile,goals:['Healthcare'],minutes:10};const ids=recommend(profile);assert.equal(ids[0],'clinic');assert.ok(ids.length<=3);assert.ok(places.filter(p=>ids.includes(p.id)).reduce((s,p)=>s+p.minutes,0)<=10)});
+test('missing preferences always give an available route',()=>{const ids=recommend(initialState().profile);assert.ok(ids.length>0);assert.ok(ids.every(id=>places.some(p=>p.id===id)))});
+test('spaced recall schedules difficulty sooner without losing the word',()=>{const now=new Date('2026-10-27T12:00:00Z');const word={key:'a',word:'das Team',meaning:'team',place:'office',due:now.toISOString(),interval:2};assert.equal(reschedule(word,'again',now).due,'2026-10-27T12:10:00.000Z');assert.equal(reschedule(word,'unsure',now).interval,1);assert.equal(reschedule(word,'know',now).interval,4);assert.equal(word.interval,2)});
+test('streak tolerates today not yet being practised and deduplicates days',()=>{assert.equal(streak(['2026-10-25','2026-10-26','2026-10-26'],new Date('2026-10-27T12:00:00Z')),2);assert.equal(streak(['2026-10-24'],new Date('2026-10-27T12:00:00Z')),0)});
+test('saved state rejects wrong versions and unavailable route IDs',()=>{assert.ok(validState(initialState()));assert.equal(validState({...initialState(),version:2}),false);assert.equal(validState({...initialState(),route:['unknown']}),false);assert.equal(validState(null),false)});
+test('every destination has usable lesson content, correct answer and distinct position',()=>{assert.equal(new Set(places.map(p=>p.id)).size,places.length);assert.equal(new Set(places.map(p=>p.position.join(','))).size,places.length);for(const p of places){assert.ok(p.options[p.answer]);assert.ok(p.words.length>=3);assert.ok(p.dialogue.length>=2);assert.ok(p.objective&&p.challenge&&p.phrase)}});
