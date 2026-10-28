@@ -1,5 +1,5 @@
 import {places, type Skill} from './data.ts';
-export interface Profile { name:string; country:string; city:string; destination:string; level:string; languages:string[]; other:string; support:string; goals:string[]; minutes:number; interests:string; exam:string; }
+export interface Profile { picture?:string; about?:string; name:string; country:string; city:string; destination:string; level:string; languages:string[]; other:string; support:string; goals:string[]; minutes:number; interests:string; exam:string; }
 export interface Attempt { place:string; correct:boolean; at:string; }
 export interface Review {key:string; word:string; meaning:string; place:string; due:string; interval:number;}
 export interface Run {step:number; answer:number|null; checked:boolean; challenge:string; turn:number;}

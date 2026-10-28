@@ -50,3 +50,7 @@ Inspected the existing repository's `Codex_Master_Prompt_WNDRLST.md`, `docs/PROD
 ## Verification
 
 TypeScript, ESLint, six Node tests, and the production build passed locally. Browser checks covered onboarding, manual city entry, multiple languages/goals, Portuguese feedback, wrong-answer retry, scripted rehearsal, writing and position persistence after reload, completion, word review scheduling, and dark-mode persistence. The cloud browser has WebGL disabled: automatic list fallback worked; 3D rendering/picking remains unverified on WebGL hardware. Mobile layouts are implemented but not device-tested. No Core Web Vitals or complete accessibility audit is claimed. Vite reports non-fatal Lucide `use client` bundling warnings in this client-only application.
+
+### Personal profile
+
+Settings → Your profile supports an optional picture and a 500-character About me field. JPEG/PNG/WebP inputs up to 5 MB are decoded locally, center-cropped to 256×256 JPEG, and re-encoded without original metadata. Save/remove operations preserve learning progress. The picture appears in the sidebar and header. Existing version-1 profiles continue working without these optional fields. All profile data remains browser-local; there is no public profile or file upload service.
